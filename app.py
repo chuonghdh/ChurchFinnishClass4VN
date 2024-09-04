@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 def set_custom_css():
     """Set custom CSS for wider table, row borders, and hover effects."""
@@ -85,9 +86,12 @@ def main():
                     st.success("Passkey validated!")
                     st.session_state.page = 'table'
                     st.session_state.url = 'Manage_Test/edit_test.py'
+                    time.sleep(0.8)
                     st.rerun()  # Reload the page to reflect the new selection
                 else:
+                    st.session_state.passkey_validated = False
                     st.warning("Wrong passkey. Please try again.")
+                    time.sleep(0.8)
         else:
             # If passkey has already been validated, process the request
             st.session_state.page = 'table'
