@@ -35,7 +35,7 @@ st.title('Back up data')
 st.write('This is a page to download all data from host')
 
 # Set the directory where your CSV files are stored
-folder_path = ""  # Change this to your CSV directory path
+folder_path = "Data"  # Change this to your CSV directory path
 
 # Loop through each file in the directory
 for filename in os.listdir(folder_path):
