@@ -73,7 +73,7 @@ def main():
     if st.sidebar.button('Edit current test'):
         # If passkey has not been validated, prompt the user to enter it
         if not st.session_state.passkey_validated:
-            st.session_state.page = None
+            #st.session_state.page = None
             st.write("###Warning###")
             st.subheader("You need passkey to edit the test:")
             passkey = st.text_input('Enter passkey:', type='password')
