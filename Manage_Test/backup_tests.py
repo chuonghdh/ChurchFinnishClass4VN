@@ -7,9 +7,6 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Constants for file paths
-TESTS_UNLOAD_CSV_FILE_PATH = 'Data/TestUnload.csv'  # Adjust the path if necessary
-
 def read_csv_file(filename):
     """Read data from a CSV file."""
     try:
@@ -37,12 +34,8 @@ def read_csv_file(filename):
 st.title('Back up data')
 st.write('This is a page to download all data from host')
 
-data = read_csv_file(TESTS_UNLOAD_CSV_FILE_PATH)
-st.write("Columns in the file:", data.columns.values)
-st.write(data)
-
 # Set the directory where your CSV files are stored
-folder_path = "Data"  # Change this to your CSV directory path
+folder_path = ""  # Change this to your CSV directory path
 
 # Loop through each file in the directory
 for filename in os.listdir(folder_path):
