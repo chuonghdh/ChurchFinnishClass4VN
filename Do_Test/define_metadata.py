@@ -1,10 +1,8 @@
 import streamlit as st
 import pandas as pd
-import requests
-from PIL import Image
-from io import BytesIO
 import logging
 import time
+import os
 #from Do_Test.do_test import main_do_test
 
 # Setup logging
@@ -19,15 +17,30 @@ ATTEMPTDATA_CSV_FILE_PATH = 'Data/AttemptData.csv'
 PLACEHOLDER_IMAGE = "Data/image/placeholder_image.png"
 IMAGE_SIZE = 140  # Set this to the desired thumbnail size
 
-def read_csv_file(filename):
+# File path for the CSV in the Streamlit environment
+local_UserData_path = 'local_UserData.csv'
+local_ClassData_path = 'local_ClassData.csv'
+local_AttemptData_path = 'local_AttemptData.csv'
+local_TestsList_path = 'local_TestsListData.csv'
+
+def read_csv_file(repo_path, local_path):
     """Read data from a CSV file."""
     try:
-        df = pd.read_csv(filename)
-        logger.info(f"Successfully loaded data from {filename}")
+        #df = pd.read_csv(filename)
+        #logger.info(f"Successfully loaded data from {filename}")
+        
+        if os.path.exists(local_path):
+            df = pd.read_csv(local_path)
+            #st.info("Data loaded from local storage.")
+        else:
+            # Initial load from a repository, as a fallback (if needed)
+            df = pd.read_csv(repo_path)  # Replace with your default CSV
+            df.to_csv(local_path, index=False)  # Save to local environment
+            #st.info("Data loaded from repository and saved to local storage.")
         return df
     except (FileNotFoundError, pd.errors.EmptyDataError, pd.errors.ParserError) as e:
-        st.error(f"Error loading file: {filename} - {str(e)}")
-        logger.error(f"Error loading file: {filename} - {str(e)}")
+        st.error(f"Error loading file: {repo_path} - {str(e)}")
+        logger.error(f"Error loading file: {repo_path} - {str(e)}")
         return pd.DataFrame()
     except Exception as e:
         st.error(f"Unexpected error: {e}")
@@ -59,10 +72,10 @@ def main_define_metadata():
     st.title("Pre-Test")
 
     # Load CSV data
-    df_test = read_csv_file(TESTS_CSV_FILE_PATH)
-    df_user = read_csv_file(USERDATA_CSV_FILE_PATH)
-    df_class = read_csv_file(CLASSDATA_CSV_FILE_PATH)
-    df_attempt = read_csv_file(ATTEMPTDATA_CSV_FILE_PATH)
+    df_test = read_csv_file(TESTS_CSV_FILE_PATH, local_TestsList_path)
+    df_user = read_csv_file(USERDATA_CSV_FILE_PATH, local_UserData_path)
+    df_class = read_csv_file(CLASSDATA_CSV_FILE_PATH, local_ClassData_path)
+    df_attempt = read_csv_file(ATTEMPTDATA_CSV_FILE_PATH, local_AttemptData_path)
 
     # Filter for the selected TestID
     test_info = df_test[df_test['TestID'] == test_id]
