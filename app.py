@@ -38,10 +38,17 @@ def set_custom_css():
         unsafe_allow_html=True,
     )
 
+# Define the correct passkey
+correct_passkey = "class4vn"
+
 def main():
 
     set_custom_css()
     
+    # Create a state variable to keep track of whether the passkey has been validated
+    if 'passkey_validated' not in st.session_state:
+        st.session_state.passkey_validated = False
+
     # Define pages with their titles and file paths
     pages = {
         "Do Your Test": [
@@ -59,10 +66,29 @@ def main():
         st.session_state.page = 'test_list'
         st.session_state.url = 'Do_Test/all_tests_list.py'
         st.rerun()  # Reload the page to reflect the new selection
+    # if st.sidebar.button('Edit current test'):
+    #     st.session_state.page = 'table'
+    #     st.session_state.url = 'Manage_Test/edit_test.py'
+    #     st.rerun()  # Reload the page to reflect the new selection
     if st.sidebar.button('Edit current test'):
-        st.session_state.page = 'table'
-        st.session_state.url = 'Manage_Test/edit_test.py'
-        st.rerun()  # Reload the page to reflect the new selection
+        # If passkey has not been validated, prompt the user to enter it
+        if not st.session_state.passkey_validated:
+            passkey = st.text_input('Enter passkey:', type='password')
+        
+            if st.button('Submit'):
+                if passkey == correct_passkey:
+                    st.session_state.passkey_validated = True
+                    st.success("Passkey validated!")
+                    st.session_state.page = 'table'
+                    st.session_state.url = 'Manage_Test/edit_test.py'
+                    st.rerun()  # Reload the page to reflect the new selection
+                else:
+                    st.warning("Wrong passkey. Please try again.")
+        else:
+            # If passkey has already been validated, process the request
+            st.session_state.page = 'table'
+            st.session_state.url = 'Manage_Test/edit_test.py'
+            st.rerun()  # Reload the page to reflect the new selection
     if st.sidebar.button('Backup tests data'):
         st.session_state.page = 'backup'
         st.session_state.url = 'Manage_Test/backup_tests.py'
