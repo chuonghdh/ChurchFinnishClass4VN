@@ -104,7 +104,7 @@ def main_define_metadata():
                         'Password': ['123456']  # Default password for new users
                     })
                     df_user = pd.concat([df_user, new_user_df], ignore_index=True)
-                    save_to_csv(df_user, USERDATA_CSV_FILE_PATH, "New User Name recorded successfully.")
+                    save_to_csv(df_user, local_UserData_path, "New User Name recorded successfully.")
                     time.sleep(0.8)
                     st.rerun()
 
@@ -128,7 +128,7 @@ def main_define_metadata():
                         'TeacherName': new_teacher_input  #Temp can leave blank
                     })
                     df_class = pd.concat([df_class, new_class_df], ignore_index=True)
-                    save_to_csv(df_class, CLASSDATA_CSV_FILE_PATH, "New Class Name recorded successfully.")
+                    save_to_csv(df_class, local_ClassData_path, "New Class Name recorded successfully.")
                     time.sleep(0.8)
                     st.rerun()
     # Action buttons
@@ -157,7 +157,7 @@ def main_define_metadata():
             })
 
             df_attempt = pd.concat([df_attempt, new_attempt_df], ignore_index=True)
-            save_to_csv(df_attempt, ATTEMPTDATA_CSV_FILE_PATH, "Test attempt recorded successfully.")
+            save_to_csv(df_attempt, local_AttemptData_path, "Test attempt recorded successfully.")
             st.session_state.page = 'do_test'
             st.session_state.word_index = 1
             st.session_state.show_image = True
