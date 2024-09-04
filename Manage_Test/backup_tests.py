@@ -39,7 +39,7 @@ folder_path = "Data"  # Change this to your CSV directory path
 
 # Loop through each file in the directory
 for filename in os.listdir(folder_path):
-    if filename.endswith(".csv"):
+    if filename.endswith("WordsList.csv"):
         file_path = os.path.join(folder_path, filename)
 
         # Read the file contents
