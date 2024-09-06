@@ -23,20 +23,12 @@ local_ClassData_path = 'local_ClassData.csv'
 local_AttemptData_path = 'local_AttemptData.csv'
 local_TestsList_path = 'local_TestsListData.csv'
 
-def read_csv_file(repo_path, local_path):
+def read_csv_file(repo_path):
     """Read data from a CSV file."""
     try:
-        #df = pd.read_csv(filename)
-        #logger.info(f"Successfully loaded data from {filename}")
+        df = pd.read_csv(repo_path)
+        logger.info(f"Successfully loaded data from {repo_path}")
         
-        if os.path.exists(local_path):
-            df = pd.read_csv(local_path)
-            #st.info("Data loaded from local storage.")
-        else:
-            # Initial load from a repository, as a fallback (if needed)
-            df = pd.read_csv(repo_path)  # Replace with your default CSV
-            df.to_csv(local_path, index=False)  # Save to local environment
-            #st.info("Data loaded from repository and saved to local storage.")
         return df
     except (FileNotFoundError, pd.errors.EmptyDataError, pd.errors.ParserError) as e:
         st.error(f"Error loading file: {repo_path} - {str(e)}")
@@ -72,10 +64,10 @@ def main_define_metadata():
     st.title("Pre-Test")
 
     # Load CSV data
-    df_test = read_csv_file(TESTS_CSV_FILE_PATH, local_TestsList_path)
-    df_user = read_csv_file(USERDATA_CSV_FILE_PATH, local_UserData_path)
-    df_class = read_csv_file(CLASSDATA_CSV_FILE_PATH, local_ClassData_path)
-    df_attempt = read_csv_file(ATTEMPTDATA_CSV_FILE_PATH, local_AttemptData_path)
+    df_test = read_csv_file(TESTS_CSV_FILE_PATH)
+    df_user = read_csv_file(USERDATA_CSV_FILE_PATH)
+    df_class = read_csv_file(CLASSDATA_CSV_FILE_PATH)
+    df_attempt = read_csv_file(ATTEMPTDATA_CSV_FILE_PATH)
 
     # Filter for the selected TestID
     test_info = df_test[df_test['TestID'] == test_id]
@@ -104,7 +96,7 @@ def main_define_metadata():
                         'Password': ['123456']  # Default password for new users
                     })
                     df_user = pd.concat([df_user, new_user_df], ignore_index=True)
-                    save_to_csv(df_user, local_UserData_path, "New User Name recorded successfully.")
+                    save_to_csv(df_user, USERDATA_CSV_FILE_PATH, "New User Name recorded successfully.")
                     time.sleep(0.8)
                     st.rerun()
 
@@ -128,7 +120,7 @@ def main_define_metadata():
                         'TeacherName': new_teacher_input  #Temp can leave blank
                     })
                     df_class = pd.concat([df_class, new_class_df], ignore_index=True)
-                    save_to_csv(df_class, local_ClassData_path, "New Class Name recorded successfully.")
+                    save_to_csv(df_class, CLASSDATA_CSV_FILE_PATH, "New Class Name recorded successfully.")
                     time.sleep(0.8)
                     st.rerun()
     # Action buttons
@@ -157,7 +149,7 @@ def main_define_metadata():
             })
 
             df_attempt = pd.concat([df_attempt, new_attempt_df], ignore_index=True)
-            save_to_csv(df_attempt, local_AttemptData_path, "Test attempt recorded successfully.")
+            save_to_csv(df_attempt, ATTEMPTDATA_CSV_FILE_PATH, "Test attempt recorded successfully.")
             st.session_state.page = 'do_test'
             st.session_state.word_index = 1
             st.session_state.show_image = True
