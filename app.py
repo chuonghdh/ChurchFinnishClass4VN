@@ -97,7 +97,7 @@ def main():
             # If passkey has already been validated, process the request
             st.session_state.page = 'table'
             st.session_state.url = 'Manage_Test/edit_test.py'
-            st.rerun()  # Reload the page to reflect the new selection
+            #st.rerun()  # Reload the page to reflect the new selection
     
     if st.sidebar.button('Backup tests data'):
         st.session_state.page = 'backup'
