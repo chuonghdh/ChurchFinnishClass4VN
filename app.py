@@ -73,33 +73,32 @@ def main():
     #     st.rerun()  # Reload the page to reflect the new selection
     if st.sidebar.button('Edit current test'):
         # If passkey has not been validated, prompt the user to enter it
-        if not st.session_state.passkey_validated:
+        if st.session_state.passkey_validated == False:
             #st.session_state.page = None
             st.write("###Warning###")
             st.subheader("You need passkey to edit the test:")
-            passkey = st.text_input('Enter passkey:', type='password')
-            
-        
+            passkey = st.text_input('Enter passkey:')
             if st.button('Submit'):
-                if passkey == correct_passkey:
+                if passkey.lower == correct_passkey.lower:
                     st.session_state.passkey_validated = True
                     st.success("Passkey validated!")
-                    st.session_state.page = 'table'
-                    st.session_state.url = 'Manage_Test/edit_test.py'
-                    time.sleep(0.8)
-                    st.rerun()  # Reload the page to reflect the new selection
+                    
+                    time.sleep(2)
+                    #st.rerun()  # Reload the page to reflect the new selection
                 else:
                     st.session_state.passkey_validated = False
                     st.warning("Wrong passkey. Please try again.")
-                    time.sleep(0.8)
-                    st.session_state.page = 'test_list'
-                    st.session_state.url = 'Do_Test/all_tests_list.py'
-                    st.rerun()  # Reload the page to reflect the new selection
-        else:
+                    #time.sleep(2)
+                    #st.session_state.page = 'test_list'
+                    #st.session_state.url = 'Do_Test/all_tests_list.py'
+                    #st.rerun()  # Reload the page to reflect the new selection
+        
+        if st.session_state.passkey_validated == True:
             # If passkey has already been validated, process the request
             st.session_state.page = 'table'
             st.session_state.url = 'Manage_Test/edit_test.py'
             st.rerun()  # Reload the page to reflect the new selection
+    
     if st.sidebar.button('Backup tests data'):
         st.session_state.page = 'backup'
         st.session_state.url = 'Manage_Test/backup_tests.py'
