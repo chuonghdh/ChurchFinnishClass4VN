@@ -92,6 +92,9 @@ def main():
                     st.session_state.passkey_validated = False
                     st.warning("Wrong passkey. Please try again.")
                     time.sleep(0.8)
+                    st.session_state.page = 'test_list'
+                    st.session_state.url = 'Do_Test/all_tests_list.py'
+                    st.rerun()  # Reload the page to reflect the new selection
         else:
             # If passkey has already been validated, process the request
             st.session_state.page = 'table'

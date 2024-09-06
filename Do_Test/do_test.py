@@ -84,7 +84,7 @@ def set_words_order(df, order_type):
     df.insert(0, 'order', order)
     return df
 
-@st.cache_data
+#@st.cache_data
 def fetch_and_resize_image(url, size):
     """Fetch an image from a URL and resize it to the given size."""
     try:

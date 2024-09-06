@@ -16,7 +16,7 @@ TESTS_CSV_FILE_PATH = 'Data/TestsList.csv'  # Adjust the path if necessary
 PLACEHOLDER_IMAGE = "Data/image/placeholder_image.png"
 IMAGE_SIZE = 80  # Set this to the desired thumbnail size (e.g., 60 pixels)
 
-@st.cache_data
+#@st.cache_data
 def read_csv_file(filename):
     """Read data from a CSV file."""
     try:
