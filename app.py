@@ -66,20 +66,17 @@ def main():
     if st.sidebar.button('List of all tests'):
         st.session_state.page = 'test_list'
         st.session_state.url = 'Do_Test/all_tests_list.py'
-        st.rerun()  # Reload the page to reflect the new selection
-    # if st.sidebar.button('Edit current test'):
-    #     st.session_state.page = 'table'
-    #     st.session_state.url = 'Manage_Test/edit_test.py'
-    #     st.rerun()  # Reload the page to reflect the new selection
+        st.rerun()  
     if st.sidebar.button('Edit current test'):
+        st.session_state.page  = 'input_passkey'
         # If passkey has not been validated, prompt the user to enter it
         if st.session_state.passkey_validated == False:
             #st.session_state.page = None
             st.write("###Warning###")
             st.subheader("You need passkey to edit the test:")
-            passkey = st.text_input('Enter passkey:')
+            passkey = st.text_input('Enter passkey:',)
             if st.button('Submit'):
-                if passkey.lower == correct_passkey.lower:
+                if passkey.lower() == correct_passkey.lower():
                     st.session_state.passkey_validated = True
                     st.success("Passkey validated!")
                     st.session_state.page = 'table'
@@ -90,9 +87,9 @@ def main():
                     st.session_state.passkey_validated = False
                     st.warning("Wrong passkey. Please try again.")
                     time.sleep(2)
-                    st.session_state.page = 'test_list'
-                    st.session_state.url = 'Do_Test/all_tests_list.py'
-                    st.rerun()  # Reload the page to reflect the new selection
+                    #st.session_state.page = 'test_list'
+                    #st.session_state.url = 'Do_Test/all_tests_list.py'
+                    #st.rerun()  # Reload the page to reflect the new selection
         
         else:
             # If passkey has already been validated, process the request
