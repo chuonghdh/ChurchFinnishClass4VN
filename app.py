@@ -69,33 +69,34 @@ def main():
         st.rerun()  
     if st.sidebar.button('Edit current test'):
         st.session_state.page  = 'input_passkey'
+        st.rerun()
         # If passkey has not been validated, prompt the user to enter it
-        if st.session_state.passkey_validated == False:
-            #st.session_state.page = None
-            st.write("###Warning###")
-            st.subheader("You need passkey to edit the test:")
-            passkey = st.text_input('Enter passkey:',)
-            if st.button('Submit'):
-                if passkey.lower() == correct_passkey.lower():
-                    st.session_state.passkey_validated = True
-                    st.success("Passkey validated!")
-                    st.session_state.page = 'table'
-                    st.session_state.url = 'Manage_Test/edit_test.py'
-                    time.sleep(2)
-                    st.rerun()  # Reload the page to reflect the new selection
-                else:
-                    st.session_state.passkey_validated = False
-                    st.warning("Wrong passkey. Please try again.")
-                    time.sleep(2)
-                    #st.session_state.page = 'test_list'
-                    #st.session_state.url = 'Do_Test/all_tests_list.py'
-                    #st.rerun()  # Reload the page to reflect the new selection
+        # if st.session_state.passkey_validated == False:
+        #     #st.session_state.page = None
+        #     st.write("###Warning###")
+        #     st.subheader("You need passkey to edit the test:")
+        #     passkey = st.text_input('Enter passkey:',)
+        #     if st.button('Submit'):
+        #         if passkey.lower() == correct_passkey.lower():
+        #             st.session_state.passkey_validated = True
+        #             st.success("Passkey validated!")
+        #             st.session_state.page = 'table'
+        #             st.session_state.url = 'Manage_Test/edit_test.py'
+        #             time.sleep(2)
+        #             st.rerun()  # Reload the page to reflect the new selection
+        #         else:
+        #             st.session_state.passkey_validated = False
+        #             st.warning("Wrong passkey. Please try again.")
+        #             time.sleep(2)
+        #             #st.session_state.page = 'test_list'
+        #             #st.session_state.url = 'Do_Test/all_tests_list.py'
+        #             #st.rerun()  # Reload the page to reflect the new selection
         
-        else:
-            # If passkey has already been validated, process the request
-            st.session_state.page = 'table'
-            st.session_state.url = 'Manage_Test/edit_test.py'
-            st.rerun()  # Reload the page to reflect the new selection
+        # else:
+        #     # If passkey has already been validated, process the request
+        #     st.session_state.page = 'table'
+        #     st.session_state.url = 'Manage_Test/edit_test.py'
+        #     st.rerun()  # Reload the page to reflect the new selection
     
     if st.sidebar.button('Backup tests data'):
         st.session_state.page = 'backup'
@@ -104,11 +105,39 @@ def main():
 
     # Display the selected page
     if "page" in st.session_state:
-        st.write(f"Selected Page: {st.session_state.page}") #IMPORTANT FOR DEBUG
-        # Open the file with the correct encoding (usually UTF-8)
-        with open(st.session_state.url, 'r', encoding='utf-8') as f:
-            code = f.read()
-        exec(code, globals())  # Execute the selected page
+        if st.session_state.page  == 'input_passkey':
+            if st.session_state.passkey_validated == False:
+                #st.session_state.page = None
+                st.write("###Warning###")
+                st.subheader("You need passkey to edit the test:")
+                passkey = st.text_input('Enter passkey:')
+                if st.button('Submit'):
+                    if passkey.lower() == correct_passkey.lower():
+                        st.session_state.passkey_validated = True
+                        st.success("Passkey validated!")
+                        st.session_state.page = 'table'
+                        st.session_state.url = 'Manage_Test/edit_test.py'
+                        time.sleep(2)
+                        st.rerun()  # Reload the page to reflect the new selection
+                else:
+                    #st.session_state.passkey_validated = False
+                    st.warning("Wrong passkey. Please try again.")
+                    #time.sleep(2)
+                    #st.session_state.page = 'test_list'
+                    #st.session_state.url = 'Do_Test/all_tests_list.py'
+                    #st.rerun()  # Reload the page to reflect the new selection
+        
+            else:
+                # If passkey has already been validated, process the request
+                st.session_state.page = 'table'
+                st.session_state.url = 'Manage_Test/edit_test.py'
+                st.rerun()  # Reload the page to reflect the new selection
+        else:
+            st.write(f"Selected Page: {st.session_state.page}") #IMPORTANT FOR DEBUG
+            # Open the file with the correct encoding (usually UTF-8)
+            with open(st.session_state.url, 'r', encoding='utf-8') as f:
+                code = f.read()
+            exec(code, globals())  # Execute the selected page
     else:
         st.session_state.page = 'test_list'
         st.session_state.url = 'Do_Test/all_tests_list.py'
