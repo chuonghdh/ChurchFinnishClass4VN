@@ -7,49 +7,46 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def read_csv_file(filename):
-    """Read data from a CSV file."""
-    try:
-        df = pd.read_csv(filename)
-        logger.info(f"Successfully loaded data from {filename}")
-        return df
-    except FileNotFoundError:
-        st.error(f"File not found: {filename}")
-        logger.error(f"File not found: {filename}")
-        return pd.DataFrame()
-    except pd.errors.EmptyDataError:
-        st.error(f"No data: The file {filename} is empty.")
-        logger.error(f"No data: The file {filename} is empty.")
-        return pd.DataFrame()
-    except pd.errors.ParserError:
-        st.error(f"Parsing error: The file {filename} is corrupt or has an invalid format.")
-        logger.error(f"Parsing error: The file {filename} is corrupt or has an invalid format.")
-        return pd.DataFrame()
-    except Exception as e:
-        st.error(f"Unexpected error: {e}")
-        logger.exception("Unexpected error occurred while reading the CSV file.")
-        return pd.DataFrame()
-    
+def print_dir():
+    # Get the current working directory
+    current_dir = os.getcwd()
+
+    # List all items in the current directory
+    items_in_dir = os.listdir(current_dir)
+
+    # Filter out only directories
+    directories = [item for item in items_in_dir if os.path.isdir(os.path.join(current_dir, item))]
+
+    # Print the directories using Streamlit
+    st.write(f"Directories in {current_dir}:")
+    for directory in directories:
+        st.write(directory)
 
 st.title('Back up data')
 st.write('This is a page to download all data from host')
 
 # Set the directory where your CSV files are stored
-folder_path = "Data"  # Change this to your CSV directory path
+folder_path = "prd_Data"  # Change this to your CSV directory path
 
 # Loop through each file in the directory
-for filename in os.listdir(folder_path):
-    if filename.endswith("WordsList.csv"):
-        file_path = os.path.join(folder_path, filename)
+if os.path.exists(folder_path):  # Check if the folder exists and is a directory
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".csv"):
+            file_path = os.path.join(folder_path, filename)
 
-        # Read the file contents
-        with open(file_path, "rb") as file:
-            file_bytes = file.read()
+            # Read the file contents with UTF-8 BOM encoding
+            with open(file_path, "r", encoding="utf-8-sig") as file:
+                file_content = file.read()
 
-        # Create a download button for each file
-        st.download_button(
-            label=f"Download {filename}",
-            data=file_bytes,
-            file_name=filename,
-            mime="text/csv"
-        )
+            # Convert the content back to bytes for the download button
+            file_bytes = file_content.encode("utf-8-sig")
+
+            # Create a download button for each file
+            st.download_button(
+                label=f"Download {filename}",
+                data=file_bytes,
+                file_name=filename,
+                mime="text/csv"
+            )
+else: 
+    st.warning(f"Cannot find '{folder_path}' folder")

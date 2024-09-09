@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+import os
+import common as cm
 import time
 
 def set_custom_css():
@@ -43,13 +46,17 @@ def set_custom_css():
 correct_passkey = "class4vn"
 
 def main():
-
-    set_custom_css()
+    prd_data_path = 'prd_Data' # prd_Data file only available in PRD evironment
+    if not os.path.exists(prd_data_path):
+        cm.initialize_folder('prd_Data')
+        cm.initialize_data()
     
+    set_custom_css()
+
     # Create a state variable to keep track of whether the passkey has been validated
     if 'passkey_validated' not in st.session_state:
         st.session_state.passkey_validated = False
-
+    
     # Define pages with their titles and file paths
     pages = {
         "Do Your Test": [
@@ -66,38 +73,10 @@ def main():
     if st.sidebar.button('List of all tests'):
         st.session_state.page = 'test_list'
         st.session_state.url = 'Do_Test/all_tests_list.py'
-        st.rerun()  
+        st.rerun()  # Reload the page to reflect the new selection
     if st.sidebar.button('Edit current test'):
         st.session_state.page  = 'input_passkey'
         st.rerun()
-        # If passkey has not been validated, prompt the user to enter it
-        # if st.session_state.passkey_validated == False:
-        #     #st.session_state.page = None
-        #     st.write("###Warning###")
-        #     st.subheader("You need passkey to edit the test:")
-        #     passkey = st.text_input('Enter passkey:',)
-        #     if st.button('Submit'):
-        #         if passkey.lower() == correct_passkey.lower():
-        #             st.session_state.passkey_validated = True
-        #             st.success("Passkey validated!")
-        #             st.session_state.page = 'table'
-        #             st.session_state.url = 'Manage_Test/edit_test.py'
-        #             time.sleep(2)
-        #             st.rerun()  # Reload the page to reflect the new selection
-        #         else:
-        #             st.session_state.passkey_validated = False
-        #             st.warning("Wrong passkey. Please try again.")
-        #             time.sleep(2)
-        #             #st.session_state.page = 'test_list'
-        #             #st.session_state.url = 'Do_Test/all_tests_list.py'
-        #             #st.rerun()  # Reload the page to reflect the new selection
-        
-        # else:
-        #     # If passkey has already been validated, process the request
-        #     st.session_state.page = 'table'
-        #     st.session_state.url = 'Manage_Test/edit_test.py'
-        #     st.rerun()  # Reload the page to reflect the new selection
-    
     if st.sidebar.button('Backup tests data'):
         st.session_state.page = 'backup'
         st.session_state.url = 'Manage_Test/backup_tests.py'
@@ -115,15 +94,10 @@ def main():
                     st.success("Passkey validated!")
                     st.session_state.page = 'table'
                     st.session_state.url = 'Manage_Test/edit_test.py'
-                    time.sleep(2)
+                    time.sleep(0.8)
                     st.rerun()  # Reload the page to reflect the new selection
                 else:
-                    #st.session_state.passkey_validated = False
                     st.warning("Wrong passkey. Please try again.")
-                    #time.sleep(2)
-                    #st.session_state.page = 'test_list'
-                    #st.session_state.url = 'Do_Test/all_tests_list.py'
-                    #st.rerun()  # Reload the page to reflect the new selection
         else:
             st.write(f"Selected Page: {st.session_state.page}") #IMPORTANT FOR DEBUG
             st.session_state.passkey_validated = False
