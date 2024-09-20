@@ -85,7 +85,7 @@ def show_upload_page():
                 else:
                     st.warning("Please correct the issues below and re-submit.")
                     st.session_state['valid'] = False
-
+            
             # Step 5: Display and edit the data using st.data_editor
             edited_df = st.data_editor(df, key="data_editor")
 
