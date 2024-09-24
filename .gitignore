@@ -1,3 +1,5 @@
-#Data/UserData.csv
-#Data/ClassData.csv
-#Data/AttemptData.csv
+Data/
+prd_Data/
+__pycache__/
+settings.json
+Data/AttemptData.csv
